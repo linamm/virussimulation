@@ -9,6 +9,15 @@ const MARGIN = 50;
 const POPULATION_SIZE = 500;
 let aTimer;
 
+const styles = {
+  button: {
+    margin: 10, 
+    padding: 10,
+    borderWidth: 2,
+    borderColor: 'grey'
+  }
+}
+
 function App() {
   let contents = [];
   const [population, setPopulation] = useState(POPULATION_SIZE);
@@ -18,13 +27,14 @@ function App() {
   const [numOfFatalities, setNumOfFatalities] = useState(0);
   const [numOfImmune, setNumOfImmune] = useState(0);
   const [numOfUnaffected, setNumOfUnaffected] = useState(POPULATION_SIZE - 1);
+  const [stopped, setStopped] = useState(false);
 
   let d = new Date();
   let n = d.getTime();
   //console.log('Number of Infected is: ' + numOfInfected);
 
   if ( numOfInfected < dots.length) {
-    if (n > lastUpdate + INTERVAL) {
+    if (n > lastUpdate + INTERVAL && !stopped) {
       setLastUpdate(n);
       setNumOfInfected(numberOfType(dots, 'red'));
       setNumOfFatalities(numberOfType(dots, 'grey'));
@@ -41,12 +51,17 @@ function App() {
     contents.push(<Circle color={dot.color} x={dot.x + MARGIN} y={dot.y + MARGIN}></Circle>); //Shift the display area by MARGIN
   });
 
-  const onRestart = () => {
+  const onPause = () => {
     if(aTimer) {
       clearTimeout(aTimer);
+      aTimer = null;
     }
-    alert();
+    setStopped(!stopped);
+  }
+
+  const onRestart = () => {
     setDots(generateRandomDots(population, WIDTH, HEIGHT));
+    setStopped(false);
   }
 
   return (
@@ -57,7 +72,8 @@ function App() {
       </div>
       <div>{'Population: ' + population}</div>
       <input id="typeinp" type="range" min="100" max="1000" value={population} step="100" onChange={(event) => setPopulation(event.target.value)}/>
-      <div onClick={onRestart}>Restart</div>
+      <div onClick={onPause} style={styles.button}>{stopped ? 'Resume' : 'Stop'}</div>
+      {stopped && (<div onClick={onRestart} style={styles.button}>Restart</div> )}
     </div>
   );
 }
