@@ -1,6 +1,6 @@
 export const POPULATION_SIZE = 1000;
-export const WIDTH = 300;
-export const HEIGHT = 300;
+export const WIDTH = 400;
+export const HEIGHT = 400;
 export const MINIMUM_DISTANCE = 20;
 
 const NUMBER_OF_DAYS_CURED = 14;
