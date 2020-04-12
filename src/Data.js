@@ -1,16 +1,12 @@
 export const POPULATION_SIZE = 1000;
 export const WIDTH = 400;
 export const HEIGHT = 400;
-export const MINIMUM_DISTANCE = 20;
 
 const NUMBER_OF_DAYS_CURED = 14;
 const NUMBER_OF_DAYS_MIGHT_DIE = 5;
 const FATALITY_RATE = 0.05; // 5%;
-const MAX_MOVEMENT = 50;
-const ACTUAL_MOVE_FACTOR = MAX_MOVEMENT * WIDTH / POPULATION_SIZE;
-const ACTUAL_MINIMUM_DISTANCE = MINIMUM_DISTANCE * WIDTH / POPULATION_SIZE;
-
-
+const MAX_MOVEMENT = 20;
+const MINIMUM_DISTANCE = 5;
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -59,7 +55,7 @@ const distance = (dot1, dot2) => {
 
 export const moveDots = (dots, mobility) => {
   let newDots = [];
-  const move = mobility * ACTUAL_MOVE_FACTOR;
+  const move = mobility * MAX_MOVEMENT;
   dots.forEach((dot)=>{
     let newDot = {};
     let newX = getBoundedValue((dot.x + getRandomPlusMinusInt(move)), 0, WIDTH, move);
@@ -98,7 +94,7 @@ export const moveDots = (dots, mobility) => {
       newDots.forEach((j) => {// Enter a loop of check the distance with all other dots 
           if(j.color === 'blue') {
            const dist = distance(i, j);
-            if ( dist < ACTUAL_MINIMUM_DISTANCE) {//i.e. check if other not already infected people has been in contact
+            if ( dist < MINIMUM_DISTANCE) {//i.e. check if other not already infected people has been in contact
               j.color = 'red'; //infected
               j.days = 1;
               //console.log('distance is : ' + dist + ' infected');

@@ -4,7 +4,7 @@ import Circle from './Circle';
 import { infectDots, moveDots, generateRandomDots, numberOfType } from './Data';
 import { WIDTH, HEIGHT, POPULATION_SIZE} from './Data';
 
-const INTERVAL = 200; //move interval in milli seconds
+const INTERVAL = 500; //move interval in milli seconds
 const MARGIN = 50;
 let mobility = 0.5; // Number between 0 - 1; 1 being very mobile. 0 is not moving at all.
 
@@ -14,8 +14,28 @@ const styles = {
   button: {
     margin: 10, 
     padding: 10,
+    borderWidth: 5,
+    borderRadius: 5,
+    width: 200,
+    justifyContent: "center",
+    alignItems: "center",
     borderWidth: 2,
-    borderColor: 'grey'
+    borderStyle: 'solid',
+    borderColor: 'black',
+  },
+  label: {
+    margin: 2, 
+    padding: 2,
+    width: 200,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    textAlign: 'center'
+  },
+  text: {
+    margin:2,
+    padding: 2,
+    backgroundColor: '#eeeeee'
   }
 }
 
@@ -30,14 +50,14 @@ function App() {
   let n = d.getTime();
   //console.log('Number of Infected is: ' + numOfInfected);
   const numberOfInfected = numberOfType(dots, 'red');
-  if ( numberOfInfected < dots.length && numberOfInfected !== 0) {
+ // if ( numberOfInfected < dots.length && numberOfInfected !== 0) {
     if (n > lastUpdate + INTERVAL && !stopped) {
       setLastUpdate(n);
       aTimer = setTimeout(()=> {
         const newDots = infectDots(moveDots(dots, mobility));
         setDots(newDots);
       }, INTERVAL);
-  }
+ // }
 }
 
   dots.forEach((dot) => {
@@ -54,12 +74,24 @@ function App() {
 
   const onRestart = () => {
     setDots(generateRandomDots(population, WIDTH, HEIGHT));
-    setStopped(false);
+    alert('Simulation Restarting');
   }
 
   const onMobilityChanged = (event) => {
     mobility = event.target.value;
   }
+
+  const onAddInfection = () => {
+    for(let i=0; i<dots.length; i++) {
+        if (dots[i].color === 'blue') {
+          dots[i].color = 'red';
+          dots[i].days = 0;
+          break;
+        }
+    }
+    setDots(dots);
+  };
+
 
   return (
     <div className="App">
@@ -68,11 +100,18 @@ function App() {
           {contents}
         </div>
         <div style={{marginTop: 50, marginLeft: 400 + 50 + 10}}>
-        <div>{'Infected: ' + numberOfType(dots, 'red') } </div>
-        <div>{'Dead: ' + numberOfType(dots, 'black')} </div>
-        <div>{'Recovered:  ' + numberOfType(dots, 'green') } </div>
-        <div>{'Unaffected: ' +numberOfType(dots, 'blue') } </div>
+        <div style={styles.label}>{'Infected: ' + numberOfType(dots, 'red') } </div>
+        <div style={styles.label}>{'Recovered: ' + numberOfType(dots, 'green') } </div>
+        <div style={styles.label}>{'Unaffected: ' +numberOfType(dots, 'blue') } </div>
+        <div style={styles.label}>{'Dead: ' + numberOfType(dots, 'black')} </div>
+
+       <div style={styles.button} onClick={onRestart}> <div style={styles.text}>Restart</div>  </div>
+        <div style={styles.button} onClick={onAddInfection}> <div style={styles.text}>Add new case</div> </div>
+
+        <div style={styles.button}>
+        <div> Control mobility level </div>
         <input id="typeinp" type="range" min="0" max="1" defaultValue="0.5" step="0.1" style={{width: 100}} onChange={onMobilityChanged}/>
+        </div>
 
         </div>
         
