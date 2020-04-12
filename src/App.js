@@ -4,9 +4,9 @@ import Circle from './Circle';
 import { infectDots, moveDots, generateRandomDots, numberOfType } from './Data';
 import { WIDTH, HEIGHT, POPULATION_SIZE} from './Data';
 
-const INTERVAL = 1000; //move interval in milli seconds
+const INTERVAL = 100; //move interval in milli seconds
 const MARGIN = 50;
-const MOBILITY = 20;
+const MOBILITY = 0.2; // Number between 0 - 1; 1 being very mobile. 0 is not moving at all.
 
 let aTimer;
 

@@ -6,8 +6,8 @@ function Circle(props) {
         position: 'absolute',
         backgroundColor: props.color,
         borderRadius: "50%",
-        width:8,
-        height:8,
+        width:4,
+        height:4,
         top: props.x,
         left: props.y
     }
