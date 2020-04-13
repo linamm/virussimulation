@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import './App.css';
 import Circle from './Circle';
-import { infectDots, moveDots, generateRandomDots, numberOfType } from './Data';
-import { WIDTH, HEIGHT, POPULATION_SIZE} from './Data';
+import { infectDots, moveDots, generateRandomDots, numberOfType, onAddInfection } from './Data';
+import { WIDTH, HEIGHT, POPULATION_SIZE, COLOR_INFECTED, COLOR_RECOVERED, COLOR_DEAD, COLOR_UNINFECTED } from './Data';
 
 const INTERVAL = 500; //move interval in milli seconds
 const MARGIN = 50;
@@ -81,18 +81,6 @@ function App() {
     mobility = event.target.value;
   }
 
-  const onAddInfection = () => {
-    for(let i=0; i<dots.length; i++) {
-        if (dots[i].color === 'blue') {
-          dots[i].color = 'red';
-          dots[i].days = 0;
-          break;
-        }
-    }
-    setDots(dots);
-  };
-
-
   return (
     <div className="App">
       <div className='body'>
@@ -100,10 +88,10 @@ function App() {
           {contents}
         </div>
         <div style={{marginTop: 50, marginLeft: 400 + 50 + 10}}>
-        <div style={styles.label}>{'Infected: ' + numberOfType(dots, 'red') } </div>
-        <div style={styles.label}>{'Recovered: ' + numberOfType(dots, 'green') } </div>
-        <div style={styles.label}>{'Unaffected: ' +numberOfType(dots, 'blue') } </div>
-        <div style={styles.label}>{'Dead: ' + numberOfType(dots, 'black')} </div>
+        <div style={styles.label}>{'Infected: ' + numberOfType(dots, COLOR_INFECTED) } </div>
+        <div style={styles.label}>{'Recovered: ' + numberOfType(dots, COLOR_RECOVERED) } </div>
+        <div style={styles.label}>{'Unaffected: ' +numberOfType(dots, COLOR_UNINFECTED) } </div>
+        <div style={styles.label}>{'Dead: ' + numberOfType(dots, COLOR_DEAD)} </div>
 
        <div style={styles.button} onClick={onRestart}> <div style={styles.text}>Restart</div>  </div>
         <div style={styles.button} onClick={onAddInfection}> <div style={styles.text}>Add new case</div> </div>

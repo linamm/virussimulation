@@ -8,6 +8,24 @@ const FATALITY_RATE = 0.05; // 5%;
 const MAX_MOVEMENT = 20;
 const MINIMUM_DISTANCE = 5;
 
+  // red is infected. black is dead, blue is not infected, green is immune and not infectious.
+const COLOR_INFECTED = 'red';
+const COLOR_RECOVERED = 'green';
+const COLOR_DEAD = 'black';
+const COLOR_UNINFECTED = 'blue';
+
+
+const onAddInfection = () => {
+  for(let i=0; i<dots.length; i++) {
+      if (dots[i].color === COLOR_UNINFECTED) {
+        dots[i].color = COLOR_INFECTED;
+        dots[i].days = 0;
+        break;
+      }
+  }
+  setDots(dots);
+};
+
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
@@ -27,12 +45,11 @@ function ifDead() {
 export const generateRandomDots = (population, maxWidth, maxHeight) => {
   let dots = [];
   // days = 0, is not infected. days > 14 is infected and immune
-  // red is infected. black is dead, blue is not infected, green is immune and not infectious.
 
   for(let i = 0; i < population; i++) {
-    const dot =  {x: getRandomInt(maxWidth), y: getRandomInt(maxHeight), color: 'blue', days: 0};
+    const dot =  {x: getRandomInt(maxWidth), y: getRandomInt(maxHeight), color: COLOR_UNINFECTED, days: 0};
     if (i === 0) {
-      dot.color = 'red';
+      dot.color = COLOR_INFECTED;
       dot.days = 1;
     }
     dots.push(dot);
@@ -63,19 +80,19 @@ export const moveDots = (dots, mobility) => {
     
     newDot.color = dot.color;
 
-    if (dot.color === 'red') {
+    if (dot.color === COLOR_INFECTED) {
       newDot.days = dot.days + 1;
       if(newDot.days > NUMBER_OF_DAYS_MIGHT_DIE && newDot.days <= NUMBER_OF_DAYS_CURED) {
         if (ifDead() === true) {
-          newDot.color = 'black';
+          newDot.color = COLOR_DEAD;
         }
       }
-      if(!(newDot.color === 'black') && newDot.days > NUMBER_OF_DAYS_CURED) {
-          newDot.color = 'green';
+      if(!(newDot.color === COLOR_DEAD) && newDot.days > NUMBER_OF_DAYS_CURED) {
+          newDot.color = COLOR_RECOVERED;
       }
     }
 
-    if (newDot.color === 'black') {
+    if (newDot.color === COLOR_DEAD) {
       newDot.x = dot.x;
       newDot.y = dot.y;
     } else {
@@ -90,12 +107,12 @@ export const moveDots = (dots, mobility) => {
  export const infectDots = (oldDots) => {
   let newDots = [...oldDots];
   oldDots.forEach((i) => {
-    if (i.color === 'red') {  // Check if the dot is red color //i.e. confirmed case of COVID-19
+    if (i.color === COLOR_INFECTED) {  // Check if the dot is red color //i.e. confirmed case of COVID-19
       newDots.forEach((j) => {// Enter a loop of check the distance with all other dots 
-          if(j.color === 'blue') {
+          if(j.color === COLOR_UNINFECTED) {
            const dist = distance(i, j);
             if ( dist < MINIMUM_DISTANCE) {//i.e. check if other not already infected people has been in contact
-              j.color = 'red'; //infected
+              j.color = COLOR_INFECTED; //infected
               j.days = 1;
               //console.log('distance is : ' + dist + ' infected');
             }
