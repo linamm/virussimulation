@@ -81,6 +81,10 @@ function App() {
     mobility = event.target.value;
   }
 
+  const _onAddInfection = () => {
+      setDots(onAddInfection(dots));
+  }
+
   return (
     <div className="App">
       <div className='body'>
@@ -94,7 +98,7 @@ function App() {
         <div style={styles.label}>{'Dead: ' + numberOfType(dots, COLOR_DEAD)} </div>
 
        <div style={styles.button} onClick={onRestart}> <div style={styles.text}>Restart</div>  </div>
-        <div style={styles.button} onClick={onAddInfection}> <div style={styles.text}>Add new case</div> </div>
+        <div style={styles.button} onClick={_onAddInfection}> <div style={styles.text}>Add new case</div> </div>
 
         <div style={styles.button}>
         <div> Control mobility level </div>

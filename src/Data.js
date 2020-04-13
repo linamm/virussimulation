@@ -9,21 +9,22 @@ const MAX_MOVEMENT = 20;
 const MINIMUM_DISTANCE = 5;
 
   // red is infected. black is dead, blue is not infected, green is immune and not infectious.
-const COLOR_INFECTED = 'red';
-const COLOR_RECOVERED = 'green';
-const COLOR_DEAD = 'black';
-const COLOR_UNINFECTED = 'blue';
+export const COLOR_INFECTED = 'red';
+export const COLOR_RECOVERED = 'green';
+export const COLOR_DEAD = 'black';
+export const COLOR_UNINFECTED = 'blue';
 
 
-const onAddInfection = () => {
-  for(let i=0; i<dots.length; i++) {
-      if (dots[i].color === COLOR_UNINFECTED) {
-        dots[i].color = COLOR_INFECTED;
-        dots[i].days = 0;
+export const onAddInfection = (dots) => {
+  let newDots = [...dots];
+  for(let i=0; i<newDots.length; i++) {
+      if (newDots[i].color === COLOR_UNINFECTED) {
+        newDots[i].color = COLOR_INFECTED;
+        newDots[i].days = 0;
         break;
       }
   }
-  setDots(dots);
+  return newDots;
 };
 
 function getRandomInt(max) {
@@ -127,8 +128,9 @@ export const moveDots = (dots, mobility) => {
  }
 
  export const numberOfType = (dots, type) => {
-   let count = 0;
-   dots.forEach((dot) => {
+  let newDots = [...dots];
+  let count = 0;
+  newDots.forEach((dot) => {
      if (dot.color === type) count++;
    });
    return count;
