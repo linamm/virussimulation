@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Virus Simulation",
+  "name": "Simulate how virus spread taking consideration of social mobility",
   "icons": [
     {
       "src": "favicon.ico",

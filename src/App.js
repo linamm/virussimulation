@@ -4,9 +4,9 @@ import Circle from './Circle';
 import { infectDots, moveDots, generateRandomDots, numberOfType, onAddInfection } from './Data';
 import { WIDTH, HEIGHT, POPULATION_SIZE, COLOR_INFECTED, COLOR_RECOVERED, COLOR_DEAD, COLOR_UNINFECTED } from './Data';
 
-const INTERVAL = 500; //move interval in milli seconds
+const INTERVAL = 200; //move interval in milli seconds
 const MARGIN = 50;
-let mobility = 0.5; // Number between 0 - 1; 1 being very mobile. 0 is not moving at all.
+let mobility = 1; // Number between 0 - 1; 1 being very mobile. 0 is not moving at all.
 
 let aTimer;
 
@@ -30,7 +30,8 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "flex-start",
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'black'
   },
   text: {
     margin:2,
@@ -92,17 +93,17 @@ function App() {
           {contents}
         </div>
         <div style={{marginTop: 50, marginLeft: 400 + 50 + 10}}>
-        <div style={styles.label}>{'Infected: ' + numberOfType(dots, COLOR_INFECTED) } </div>
-        <div style={styles.label}>{'Recovered: ' + numberOfType(dots, COLOR_RECOVERED) } </div>
-        <div style={styles.label}>{'Unaffected: ' +numberOfType(dots, COLOR_UNINFECTED) } </div>
-        <div style={styles.label}>{'Dead: ' + numberOfType(dots, COLOR_DEAD)} </div>
+        <div style={{...styles.label, ...{color: COLOR_INFECTED}}}>{'Infected: ' + numberOfType(dots, COLOR_INFECTED) } </div>
+        <div style={{...styles.label, ...{color: COLOR_RECOVERED}}}>{'Recovered: ' + numberOfType(dots, COLOR_RECOVERED) } </div>
+        <div style={{...styles.label, ...{color: COLOR_UNINFECTED}}}>{'Unaffected: ' +numberOfType(dots, COLOR_UNINFECTED) } </div>
+        <div style={{...styles.label, ...{color: COLOR_DEAD}}}>{'Dead: ' + numberOfType(dots, COLOR_DEAD)} </div>
 
        <div style={styles.button} onClick={onRestart}> <div style={styles.text}>Restart</div>  </div>
         <div style={styles.button} onClick={_onAddInfection}> <div style={styles.text}>Add new case</div> </div>
 
         <div style={styles.button}>
         <div> Control mobility level </div>
-        <input id="typeinp" type="range" min="0" max="1" defaultValue="0.5" step="0.1" style={{width: 100}} onChange={onMobilityChanged}/>
+        <input id="typeinp" type="range" min="0" max="1" defaultValue="1" step="0.1" style={{width: 100}} onChange={onMobilityChanged}/>
         </div>
 
         </div>

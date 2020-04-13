@@ -6,7 +6,7 @@ const NUMBER_OF_DAYS_CURED = 14;
 const NUMBER_OF_DAYS_MIGHT_DIE = 5;
 const FATALITY_RATE = 0.05; // 5%;
 const MAX_MOVEMENT = 20;
-const MINIMUM_DISTANCE = 5;
+const MINIMUM_DISTANCE = 4;
 
   // red is infected. black is dead, blue is not infected, green is immune and not infectious.
 export const COLOR_INFECTED = 'red';
