@@ -54,7 +54,7 @@ const styles = {
   },
   footer: {
     float: 'bottom',
-    fontSize: 8
+    fontSize: 10
   },
   grid: {
   },
@@ -149,20 +149,20 @@ function App() {
           <div style={{...styles.label, ...{color: COLOR_DEAD}}}>{'Dead: ' + numberOfType(dots, COLOR_DEAD)} </div>
           <div style={styles.button} onClick={onRestart}> <div style={styles.text}>Restart</div>  </div>
           <div style={styles.button} onClick={_onAddInfection}> <div style={styles.text}>Add new case</div> </div>
-            <div> Control mobility level </div>
+            <div>  Social Mobility </div>
             <input id="typeinp" type="range" min="0" max="1" defaultValue="1" step="0.1" onChange={onMobilityChanged} style={{alignSelf: "stretch"}}/>
         </div> 
     </div>
-    <div style={{...styles.instructions, ...{margin: dimensions.width * MARGIN}}}>
+    <div style={{...styles.instructions, ...{marginRight: dimensions.width * MARGIN, marginLeft: dimensions.width * MARGIN}}}>
         <p> Lower mobility means stricter lock down measures.</p>
         <p>1) Run the simulation without changing the mobility level and observe how the virus spread and the total number of fatalities.</p>
         <p>2) Reduce the mobility to mimick a lockdown and restart the simulation and observe how the virus spread again.</p>
-        <p> 3) Change the mobility during the simulation is running to observe an mimicked lockdown - relax - lockdown again approach.
+        <p> 3) Change the mobility during a running simulation to observe an mimicked approach of 'lockdown - relax - lockdown - relax again'.
         </p>
         <p> 4) Add a new case once number of infections reaches zero, but there is still unaffected people arround. This is to observe how resillient the population is. i.e. test if the population has reached herd immunity. </p>
     </div>
     <div style={styles.footer}>
-        Disclaimer: The intention of this simulation is to bring visualisation, therefore better understanding of the effect of different control measures. Not to accurately predict the actual effect. Much more detailed domain specific knowledge needed to accurately make prediction.
+        Disclaimer: The intention of this simulation is to bring visualisation, therefore better understanding of the effect of different control measures. Not to make accurate prediction.
     </div>
     </div>
 
