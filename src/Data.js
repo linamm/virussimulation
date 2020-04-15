@@ -43,7 +43,7 @@ function ifDead() {
   return (random < FATALITY_RATE / (NUMBER_OF_DAYS_CURED - NUMBER_OF_DAYS_MIGHT_DIE)) ? true : false;
 }
 
-export const generateRandomDots = (population, maxWidth, maxHeight) => {
+const _generateRandomDots = (population, maxWidth, maxHeight) => {
   let dots = [];
   // days = 0, is not infected. days > 14 is infected and immune
 
@@ -56,6 +56,10 @@ export const generateRandomDots = (population, maxWidth, maxHeight) => {
     dots.push(dot);
   }
   return dots;
+}
+
+export const generateRandomDots = () => {
+ return  _generateRandomDots(POPULATION_SIZE, WIDTH, HEIGHT);
 }
 
 const getBoundedValue = (value, MIN, MAX, move) => {
