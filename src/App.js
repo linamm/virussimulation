@@ -8,6 +8,7 @@ const INTERVAL = 200; //move interval in milli seconds
 const MARGIN = 0.05;
 const GRAPH_WIDTH = 0.7;
 const PANEL_WIDTH = 0.2;
+const SMALL_SCREEN_LIMIT = 600;
 let mobility = 1; // Number between 0 - 1; 1 being very mobile. 0 is not moving at all.
 
 let aTimer;
@@ -26,14 +27,13 @@ const styles = {
     flex: 1
   },
   label: {
-    flex: 1,
+    display: 'flex',
     margin: 2, 
     padding: 2,
     display: "flex",
     justifyContent: "center",
-    alignItems: "flex-start",
-    textAlign: 'center',
-    color: 'black'
+    color: 'black',
+    flexDirection: 'column'
   },
   text: {
     flex: 1,
@@ -59,6 +59,7 @@ const styles = {
   grid: {
   },
   panel: {
+    flexDirection: 'column',
   },
   instructions: {
     
@@ -110,9 +111,7 @@ function App() {
  // }
 }
 
-  dots.forEach((dot) => {
-    contents.push(<Circle color={dot.color} x={transformDisplay(dot.x, WIDTH, dimensions.width * (GRAPH_WIDTH - 2 * MARGIN)) + dimensions.width * MARGIN} y={transformDisplay(dot.y, WIDTH, dimensions.width * (GRAPH_WIDTH - 2 * MARGIN)) + dimensions.width * MARGIN}></Circle>); //Shift the display area by MARGIN
-  });
+
 
   const onPause = () => {
     if(aTimer) {
@@ -135,18 +134,31 @@ function App() {
       setDots(onAddInfection(dots));
   }
 
+  const isSmallScreen = dimensions.width < SMALL_SCREEN_LIMIT ? true : false;
+  const panelWidth = isSmallScreen ? dimensions.width * GRAPH_WIDTH : dimensions.width * PANEL_WIDTH;
+  const gridSize = isSmallScreen ? dimensions.width * 0.9 : dimensions.width * GRAPH_WIDTH;
+  const dotsSize = isSmallScreen ? dimensions.width * 0.9 : dimensions.width * (GRAPH_WIDTH - 2 * MARGIN);
+
+  const panelStyle = isSmallScreen ? { marginTop: dimensions.width * MARGIN * 2 }  : {marginTop: dimensions.width * MARGIN * 2};
+
+  dots.forEach((dot) => {
+    contents.push(<Circle color={dot.color} x={transformDisplay(dot.x, WIDTH, dotsSize) + dimensions.width * MARGIN} y={transformDisplay(dot.y, WIDTH, dotsSize) + dimensions.width * MARGIN}></Circle>); //Shift the display area by MARGIN
+  });
+
   return (
     <div className="App">
       <div style={styles.container}>
-      <div style={{...styles.body, ...{width: dimensions.width}}}>
-       <div style={{...styles.grid, ...{width: dimensions.width * GRAPH_WIDTH, height: dimensions.width * GRAPH_WIDTH}}}>
+      <div style={{...styles.body, ...{width: dimensions.width, flexDirection: isSmallScreen ? 'column' : 'row'}}}>
+       <div style={{...styles.grid, ...{width: gridSize, height: gridSize}}}>
         {contents}
        </div>
-       <div style={{...styles.panel, ...{width: dimensions.width * PANEL_WIDTH, marginTop: dimensions.width * MARGIN}}}>
-          <div style={{...styles.label, ...{color: COLOR_INFECTED}}}>{'Infected: ' + numberOfType(dots, COLOR_INFECTED) } </div>
-          <div style={{...styles.label, ...{color: COLOR_RECOVERED}}}>{'Recovered: ' + numberOfType(dots, COLOR_RECOVERED) } </div>
-          <div style={{...styles.label, ...{color: COLOR_UNINFECTED}}}>{'Unaffected: ' +numberOfType(dots, COLOR_UNINFECTED) } </div>
-          <div style={{...styles.label, ...{color: COLOR_DEAD}}}>{'Dead: ' + numberOfType(dots, COLOR_DEAD)} </div>
+       <div style={{...styles.panel, ...{width: panelWidth}, ...panelStyle}}>
+         <div>
+          <div style={{...styles.label, ...{color: COLOR_INFECTED}}}> <div>{'Infected: '} </div> <div> {numberOfType(dots, COLOR_INFECTED)} </div></div>
+          <div style={{...styles.label, ...{color: COLOR_RECOVERED}}}><div>{'Recovered: '}</div> <div> {numberOfType(dots, COLOR_RECOVERED) }</div>  </div>
+          <div style={{...styles.label, ...{color: COLOR_UNINFECTED}}}><div>{'Unaffected: '}</div> <div>{numberOfType(dots, COLOR_UNINFECTED) }</div> </div>
+          <div style={{...styles.label, ...{color: COLOR_DEAD}}}><div>{'Dead: '}</div> <div>{numberOfType(dots, COLOR_DEAD)}</div> </div>
+        </div>
           <div style={styles.button} onClick={onRestart}> <div style={styles.text}>Restart</div>  </div>
           <div style={styles.button} onClick={_onAddInfection}> <div style={styles.text}>Add new case</div> </div>
             <div>  Social Mobility </div>
