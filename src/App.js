@@ -5,6 +5,7 @@ import { infectDots, moveDots, generateRandomDots, numberOfType, onAddInfection 
 import { WIDTH, HEIGHT, COLOR_INFECTED, COLOR_RECOVERED, COLOR_DEAD, COLOR_UNINFECTED } from './Data';
 
 const INTERVAL = 200; //move interval in milli seconds
+const MARGIN_TOP = 20;
 const MARGIN = 0.05;
 const GRAPH_WIDTH = 0.7;
 const PANEL_WIDTH = 0.2;
@@ -14,6 +15,10 @@ let mobility = 1; // Number between 0 - 1; 1 being very mobile. 0 is not moving 
 let aTimer;
 
 const styles = {
+  header:{
+    fontSize: 20,
+    padding: 10
+  },
   button: {
     margin: 5, 
     padding: 5,
@@ -139,14 +144,15 @@ function App() {
   const gridSize = isSmallScreen ? dimensions.width * 0.9 : dimensions.width * GRAPH_WIDTH;
   const dotsSize = isSmallScreen ? dimensions.width * 0.9 : dimensions.width * (GRAPH_WIDTH - 2 * MARGIN);
 
-  const panelStyle = isSmallScreen ? { marginTop: dimensions.width * MARGIN * 2 }  : {marginTop: dimensions.width * MARGIN * 2};
+  const panelStyle = isSmallScreen ? { marginTop: dimensions.width * MARGIN }  : {marginLeft: dimensions.width * MARGIN};
 
   dots.forEach((dot) => {
-    contents.push(<Circle color={dot.color} x={transformDisplay(dot.x, WIDTH, dotsSize) + dimensions.width * MARGIN} y={transformDisplay(dot.y, WIDTH, dotsSize) + dimensions.width * MARGIN}></Circle>); //Shift the display area by MARGIN
+    contents.push(<Circle color={dot.color} x={transformDisplay(dot.x, WIDTH, dotsSize) + dimensions.width * MARGIN + MARGIN_TOP} y={transformDisplay(dot.y, WIDTH, dotsSize) + dimensions.width * MARGIN}></Circle>); //Shift the display area by MARGIN
   });
 
   return (
     <div className="App">
+      <div style={styles.header}><b>Visualise the Spreading of Virus</b></div>
       <div style={styles.container}>
       <div style={{...styles.body, ...{width: dimensions.width, flexDirection: isSmallScreen ? 'column' : 'row'}}}>
        <div style={{...styles.grid, ...{width: gridSize, height: gridSize}}}>
