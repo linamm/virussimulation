@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import Circle from './Circle';
 import { infectDots, moveDots, generateRandomDots, numberOfType, onAddInfection } from './Data';
-import { WIDTH, HEIGHT, COLOR_INFECTED, COLOR_RECOVERED, COLOR_DEAD, COLOR_UNINFECTED } from './Data';
+import { WIDTH, COLOR_INFECTED, COLOR_RECOVERED, COLOR_DEAD, COLOR_UNINFECTED } from './Data';
 
 const INTERVAL = 200; //move interval in milli seconds
 const MARGIN_TOP = 20;
@@ -10,7 +10,7 @@ const MARGIN = 0.05;
 const GRAPH_WIDTH = 0.7;
 const PANEL_WIDTH = 0.2;
 const SMALL_SCREEN_LIMIT = 600;
-let mobility = 1; // Number between 0 - 1; 1 being very mobile. 0 is not moving at all.
+let lockdown = 0; // Number between 0 - 1; 1 being very mobile. 0 is not moving at all.
 let ppe = 0;
 let contactTracing = 0;
 
@@ -111,7 +111,7 @@ function App() {
     if (n > lastUpdate + INTERVAL && !stopped) {
       setLastUpdate(n);
       aTimer = setTimeout(()=> {
-        const newDots = infectDots(moveDots(dots, mobility, contactTracing), ppe, contactTracing);
+        const newDots = infectDots(moveDots(dots, 1 - lockdown, contactTracing), ppe, contactTracing);
         setDots(newDots);
       }, INTERVAL);
  // }
@@ -132,8 +132,8 @@ function App() {
     alert('Simulation Restarting');
   }
 
-  const onMobilityChanged = (event) => {
-    mobility = event.target.value;
+  const onLockdownChanged = (event) => {
+    lockdown = event.target.value;
   }
 
   const onPPEChanged = (event) => {
@@ -176,21 +176,27 @@ function App() {
         </div>
           <div style={styles.button} onClick={onRestart}> <div style={styles.text}>Restart</div>  </div>
           <div style={styles.button} onClick={_onAddInfection}> <div style={styles.text}>Add new case</div> </div>
-          <div>  Social Mobility </div>
-          <input id="typeinp" type="range" min="0" max="1" defaultValue="1" step="0.1" onChange={onMobilityChanged} style={{alignSelf: "stretch"}}/>
+          <div>  Lockdown Measures </div>
+          <input id="typeinp" type="range" min="0" max="0.8" defaultValue="0" step="0.08" onChange={onLockdownChanged} style={{alignSelf: "stretch"}}/>
           <div>  Personal Protection </div>
-          <input id="typeinp" type="range" min="0" max="1" defaultValue="0" step="0.1" onChange={onPPEChanged} style={{alignSelf: "stretch"}}/>
+          <input id="typeinp" type="range" min="0" max="0.5" defaultValue="0" step="0.05" onChange={onPPEChanged} style={{alignSelf: "stretch"}}/>
           <div>  Contact Tracing </div>
-          <input id="typeinp" type="range" min="0" max="1" defaultValue="0" step="0.1" onChange={onContactTracingChanged} style={{alignSelf: "stretch"}}/>
+          <input id="typeinp" type="range" min="0" max="0.5" defaultValue="0" step="0.05" onChange={onContactTracingChanged} style={{alignSelf: "stretch"}}/>
         </div> 
     </div>
     <div style={{...styles.instructions, ...{marginRight: dimensions.width * MARGIN, marginLeft: dimensions.width * MARGIN}}}>
-        <p> Lower mobility means stricter lock down measures.</p>
-        <p>1) Run the simulation without changing the mobility level and observe how the virus spread and the total number of fatalities.</p>
-        <p>2) Reduce the mobility to mimick a lockdown and restart the simulation and observe how the virus spread again.</p>
-        <p> 3) Change the mobility during a running simulation to observe an mimicked approach of 'lockdown - relax - lockdown - relax again'.
+        <p> Maximum lock down effect is 80% assuming 20% keyworkers are not affected</p>
+        <p>1) Run the simulation without changing the lockdown level and observe how the virus spread and the total number of fatalities.</p>
+        <p>2) Increase to lockdown level and restart the simulation and observe how the virus spread again.</p>
+        <p> 3) Change the lockdown level during a running simulation to observe an mimicked approach of 'lockdown - relax - lockdown - relax again'.
         </p>
         <p> 4) Add a new case once number of infections reaches zero, but there is still unaffected people arround. This is to observe how resillient the population is. i.e. test if the population has reached herd immunity. </p>
+        <p> 5) Adjust the Personal Protection level to observe it's effect. This includes the general population practices social distancing, 2 meters apart from each other, always wear mask, gloves, glasses, keep washing hands, etc. As it is imppossible to practice these 100% perfect, it is assumed here that these measures are only 50% effective when set to maximum.</p>
+        <p> 6) Adjust Contact Tracing level to observe it's effect. This includes strict quarantine of infected individuals and the people they might have infected. Taking into account of the potential missed out contacts due to insufficient tracing and asymptomatic carriers, etc, we consider this only has maximum of 50% effect as well.</p>
+        <p>
+        </p>
+        <p></p>
+        <p> Conclusion: Because of the partical effect of each approach, hopefully, you'll agree, after observing the simuation, all those measures are needed to defeat the virus completely and minimise casualty. Lock down has serious economic impacts, therefore it should be avoided as much as possible. Personal protection costs very little in comparison. Only thing required is participation and carefulness from everyone. Contact tracing could be a little bit more costly, but, should be much cheaper than having to treat a seriously ill patient. The more can be done on Personal Protection and Contact Tracing, the less we need to stay in lock down. </p>
     </div>
     <div style={styles.footer}>
         Disclaimer: The intention of this simulation is to bring visualisation, therefore better understanding of the effect of different control measures. Not to make accurate prediction.
