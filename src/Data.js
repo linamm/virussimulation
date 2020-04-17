@@ -75,9 +75,14 @@ const distance = (dot1, dot2) => {
   return Math.sqrt((dot1.x - dot2.x) * (dot1.x - dot2.x) + (dot1.y - dot2.y) * (dot1.y - dot2.y));
 };
 
-export const moveDots = (dots, mobility) => {
+export const moveDots = (dots, mobility, contactTracing) => {
+  if (Math.random() < 0.2) {
+    mobility = 1; // For 20% people who are keyworker, they are not affected by lockdown measures.
+  }
   let newDots = [];
   const move = mobility * MAX_MOVEMENT;
+  //TODO: Add random picking a group of people that are not subjected to movement restriction.
+  //TODO: Add contact tracing. i.e. better contact tracing, meaning less infected people allow to move. 
   dots.forEach((dot)=>{
     let newDot = {};
     let newX = getBoundedValue((dot.x + getRandomPlusMinusInt(move)), 0, WIDTH, move);
@@ -101,24 +106,31 @@ export const moveDots = (dots, mobility) => {
       newDot.x = dot.x;
       newDot.y = dot.y;
     } else {
-      newDot.x = newX;
-      newDot.y = newY;
+      if(newDot.color === COLOR_INFECTED && (Math.random() < contactTracing)) {
+        newDot.x = dot.x;
+        newDot.y = dot.y;
+      } else {
+        newDot.x = newX;
+        newDot.y = newY;
+      }
     }
     newDots.push(newDot);
   });
   return newDots;
 }
 
- export const infectDots = (oldDots) => {
+ export const infectDots = (oldDots, ppe, contactTracing) => {
   let newDots = [...oldDots];
   oldDots.forEach((i) => {
     if (i.color === COLOR_INFECTED) {  // Check if the dot is red color //i.e. confirmed case of COVID-19
       newDots.forEach((j) => {// Enter a loop of check the distance with all other dots 
           if(j.color === COLOR_UNINFECTED) {
            const dist = distance(i, j);
-            if ( dist < MINIMUM_DISTANCE) {//i.e. check if other not already infected people has been in contact
-              j.color = COLOR_INFECTED; //infected
-              j.days = 1;
+            if ( dist < MINIMUM_DISTANCE && Math.random() > contactTracing) {//i.e. check if other not already infected people has been in contact
+              if (Math.random() > ppe) { //Better PPE, less likely to be infected.
+                j.color = COLOR_INFECTED; //infected
+                j.days = 1;
+              }
               //console.log('distance is : ' + dist + ' infected');
             }
           }

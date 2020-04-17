@@ -11,6 +11,8 @@ const GRAPH_WIDTH = 0.7;
 const PANEL_WIDTH = 0.2;
 const SMALL_SCREEN_LIMIT = 600;
 let mobility = 1; // Number between 0 - 1; 1 being very mobile. 0 is not moving at all.
+let ppe = 0;
+let contactTracing = 0;
 
 let aTimer;
 
@@ -75,7 +77,6 @@ const transformDisplay= (x, dataWidth, displayWidth) => {
   return x * displayWidth / dataWidth;
 };
 
-
 function App() {
 
   const [dimensions, setDimensions] = React.useState({ 
@@ -110,7 +111,7 @@ function App() {
     if (n > lastUpdate + INTERVAL && !stopped) {
       setLastUpdate(n);
       aTimer = setTimeout(()=> {
-        const newDots = infectDots(moveDots(dots, mobility));
+        const newDots = infectDots(moveDots(dots, mobility, contactTracing), ppe, contactTracing);
         setDots(newDots);
       }, INTERVAL);
  // }
@@ -133,6 +134,14 @@ function App() {
 
   const onMobilityChanged = (event) => {
     mobility = event.target.value;
+  }
+
+  const onPPEChanged = (event) => {
+    ppe = event.target.value;
+  }
+
+  const onContactTracingChanged = (event) => {
+    contactTracing = event.target.value;
   }
 
   const _onAddInfection = () => {
@@ -167,8 +176,12 @@ function App() {
         </div>
           <div style={styles.button} onClick={onRestart}> <div style={styles.text}>Restart</div>  </div>
           <div style={styles.button} onClick={_onAddInfection}> <div style={styles.text}>Add new case</div> </div>
-            <div>  Social Mobility </div>
-            <input id="typeinp" type="range" min="0" max="1" defaultValue="1" step="0.1" onChange={onMobilityChanged} style={{alignSelf: "stretch"}}/>
+          <div>  Social Mobility </div>
+          <input id="typeinp" type="range" min="0" max="1" defaultValue="1" step="0.1" onChange={onMobilityChanged} style={{alignSelf: "stretch"}}/>
+          <div>  Personal Protection </div>
+          <input id="typeinp" type="range" min="0" max="1" defaultValue="0" step="0.1" onChange={onPPEChanged} style={{alignSelf: "stretch"}}/>
+          <div>  Contact Tracing </div>
+          <input id="typeinp" type="range" min="0" max="1" defaultValue="0" step="0.1" onChange={onContactTracingChanged} style={{alignSelf: "stretch"}}/>
         </div> 
     </div>
     <div style={{...styles.instructions, ...{marginRight: dimensions.width * MARGIN, marginLeft: dimensions.width * MARGIN}}}>
