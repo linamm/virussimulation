@@ -4,6 +4,11 @@ import Circle from './Circle';
 import { infectDots, moveDots, generateRandomDots, numberOfType, onAddInfection } from './Data';
 import { WIDTH, COLOR_INFECTED, COLOR_RECOVERED, COLOR_DEAD, COLOR_UNINFECTED } from './Data';
 
+import ReactGA from "react-ga";
+
+ReactGA.initialize("UA-101607316-4");
+ReactGA.pageview(window.location.pathname + window.location.search);
+
 const INTERVAL = 200; //move interval in milli seconds
 const MARGIN_TOP = 20;
 const MARGIN = 0.05;
@@ -13,8 +18,9 @@ const SMALL_SCREEN_LIMIT = 600;
 let lockdown = 0; // Number between 0 - 1; 1 being very mobile. 0 is not moving at all.
 let ppe = 0;
 let contactTracing = 0;
-
 let aTimer;
+
+
 
 const styles = {
   header:{
