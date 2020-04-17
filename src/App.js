@@ -183,7 +183,7 @@ function App() {
           <div style={styles.button} onClick={onRestart}> <div style={styles.text}>Restart</div>  </div>
           <div style={styles.button} onClick={_onAddInfection}> <div style={styles.text}>Add new case</div> </div>
           <div>  Lockdown Measures </div>
-          <input id="typeinp" type="range" min="0" max="0.8" defaultValue="0" step="0.08" onChange={onLockdownChanged} style={{alignSelf: "stretch"}}/>
+          <input id="typeinp" type="range" min="0" max="0.5" defaultValue="0" step="0.05" onChange={onLockdownChanged} style={{alignSelf: "stretch"}}/>
           <div>  Personal Protection </div>
           <input id="typeinp" type="range" min="0" max="0.5" defaultValue="0" step="0.05" onChange={onPPEChanged} style={{alignSelf: "stretch"}}/>
           <div>  Contact Tracing </div>
@@ -191,9 +191,8 @@ function App() {
         </div> 
     </div>
     <div style={{...styles.instructions, ...{marginRight: dimensions.width * MARGIN, marginLeft: dimensions.width * MARGIN}}}>
-        <p> Maximum lock down effect is 80% assuming 20% keyworkers are not affected</p>
         <p>1) Run the simulation without changing the lockdown level and observe how the virus spread and the total number of fatalities.</p>
-        <p>2) Increase the lockdown level and restart the simulation and observe how the virus spread.</p>
+        <p>2) Increase the lockdown level and restart the simulation and observe how the virus spread. Maximum lockdown effect is 50% considering key workers and essential shopping. Adjust the level to mimick strictness of the lockdown</p>
         <p> 3) Change the lockdown level during a running simulation to observe an mimicked approach of 'lockdown - relax - lockdown - relax again'.
         </p>
         <p> 4) Add a new case once number of infections reaches zero, but there is still unaffected people arround. This is to observe how resillient the population is. i.e. test if the population has reached herd immunity. </p>
