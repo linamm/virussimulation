@@ -187,7 +187,7 @@ function App() {
     <div style={{...styles.instructions, ...{marginRight: dimensions.width * MARGIN, marginLeft: dimensions.width * MARGIN}}}>
         <p> Maximum lock down effect is 80% assuming 20% keyworkers are not affected</p>
         <p>1) Run the simulation without changing the lockdown level and observe how the virus spread and the total number of fatalities.</p>
-        <p>2) Increase to lockdown level and restart the simulation and observe how the virus spread again.</p>
+        <p>2) Increase the lockdown level and restart the simulation and observe how the virus spread.</p>
         <p> 3) Change the lockdown level during a running simulation to observe an mimicked approach of 'lockdown - relax - lockdown - relax again'.
         </p>
         <p> 4) Add a new case once number of infections reaches zero, but there is still unaffected people arround. This is to observe how resillient the population is. i.e. test if the population has reached herd immunity. </p>
