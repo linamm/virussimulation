@@ -108,7 +108,6 @@ function App() {
   const [dots, setDots] = useState(generateRandomDots()); //Initialise.
   const [lastUpdate, setLastUpdate] = useState(0);
   const [stopped, setStopped] = useState(false);
-
   let d = new Date();
   let n = d.getTime();
   //console.log('Number of Infected is: ' + numOfInfected);
@@ -124,18 +123,17 @@ function App() {
 }
 
 
-
-  const onPause = () => {
+  const onRestart = () => {
+    if (stopped) return;
+    setStopped(true);
     if(aTimer) {
       clearTimeout(aTimer);
       aTimer = null;
     }
-    setStopped(!stopped);
-  }
-
-  const onRestart = () => {
-    setDots(generateRandomDots());
-    alert('Simulation Restarting');
+    setTimeout(() => {
+      setDots(generateRandomDots());
+      setStopped(false);
+    }, 2000);
   }
 
   const onLockdownChanged = (event) => {
@@ -175,12 +173,12 @@ function App() {
        </div>
        <div style={{...styles.panel, ...{width: panelWidth}, ...panelStyle}}>
          <div>
-          <div style={{...styles.label, ...{color: COLOR_INFECTED}}}> <div>{'Infected: '} </div> <div> {numberOfType(dots, COLOR_INFECTED)} </div></div>
-          <div style={{...styles.label, ...{color: COLOR_RECOVERED}}}><div>{'Recovered: '}</div> <div> {numberOfType(dots, COLOR_RECOVERED) }</div>  </div>
-          <div style={{...styles.label, ...{color: COLOR_UNINFECTED}}}><div>{'Unaffected: '}</div> <div>{numberOfType(dots, COLOR_UNINFECTED) }</div> </div>
-          <div style={{...styles.label, ...{color: COLOR_DEAD}}}><div>{'Dead: '}</div> <div>{numberOfType(dots, COLOR_DEAD)}</div> </div>
+          <div style={{...styles.label, ...{color: COLOR_INFECTED}}}> <div>{'Infected: '} </div> <div> {stopped? '-' : numberOfType(dots, COLOR_INFECTED)} </div></div>
+          <div style={{...styles.label, ...{color: COLOR_RECOVERED}}}><div>{'Recovered: '}</div> <div> {stopped? '-' : numberOfType(dots, COLOR_RECOVERED) }</div>  </div>
+          <div style={{...styles.label, ...{color: COLOR_UNINFECTED}}}><div>{'Unaffected: '}</div> <div>{stopped? '-' : numberOfType(dots, COLOR_UNINFECTED) }</div> </div>
+          <div style={{...styles.label, ...{color: COLOR_DEAD}}}><div>{'Dead: '}</div> <div>{stopped? '-' : numberOfType(dots, COLOR_DEAD)}</div> </div>
         </div>
-          <div style={styles.button} onClick={onRestart}> <div style={styles.text}>Restart</div>  </div>
+          <div style={styles.button} onClick={onRestart}> <div style={styles.text}>{stopped? 'Restarting...' : 'Restart'}</div>  </div>
           <div style={styles.button} onClick={_onAddInfection}> <div style={styles.text}>Add new case</div> </div>
           <div>  Lockdown Measures </div>
           <input id="typeinp" type="range" min="0" max="0.5" defaultValue="0" step="0.05" onChange={onLockdownChanged} style={{alignSelf: "stretch"}}/>
